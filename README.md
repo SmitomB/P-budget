@@ -7,7 +7,7 @@ data.rds- This is a R data file that includes all the input data sets for the mo
 
 Stan_code.R- RStan code needed to run the models. The "rstan" (https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started) and "rstudioapi" packages need to be installed prior to running the models. 
 # Example
-Step 1: Install "rstan" and "rstudioapi" packages. 
+Step 1: Install "rstan" and "rstudioapi" packages. // need to mention to load the packages as well.
 
 Step 2: Compile the "stanmodelcode" annual model (line #1 in the "Stan_code.R" code) .
 
