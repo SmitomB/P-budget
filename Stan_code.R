@@ -1,3 +1,6 @@
+#Install and load the libraries
+library("rstan")
+library("rstudioapi")
 stanmodelcode= '
 data {
   int<lower=0> N;     // Number of data rows
@@ -25,7 +28,7 @@ parameters {
   real <lower=0, upper = 5>gammaUrb_wst;        //Urban human waste PIC (unitless)
  real <lower=0, upper = 5>  gammaS;             //Soil PIC (unitless)
  vector <lower=0, upper = 2> [econum] psi;      //PIC-adjustment factor (unitless)
-  real <lower=0, upper = 15>  k;                //waterbody loss rate (unitless)
+  real <lower=0, upper = 20>  k;                //waterbody loss rate (unitless)
   real <lower=0, upper = 1>sigma_psi;           //PIC-adjustment factor SD
   real <lower=0, upper = 1>sigma_delta;         //EC-adjustment factor SD
   real<lower=0> sigma_wsd;                      //Random effect SD
@@ -41,7 +44,7 @@ model {
   yhat=(betaAg*delta[ecoreg].*Ag.*pow(P,gammaAg*psi[ecoreg])+betaUrb_frt*delta[ecoreg].*Urb_frt.*pow(P,gammaUrb_frt*psi[ecoreg])+betaUrb_wst*delta[ecoreg].*Urb_wst.*pow(P,gammaUrb_wst*psi[ecoreg])+betaS*delta[ecoreg].*S.*pow(P,gammaS*psi[ecoreg])).* exp(-W*k) ;
   lyb=log(yhat+1)+alpha[wsd];
   ly ~ normal(lyb, sigma);  // likelihood
-/Priors 
+//Priors 
   k~ normal(6,3);
   betaAg~ normal(.046,.021);
   betaUrb_frt~ normal(.061,.04);
@@ -63,6 +66,6 @@ sigma_delta~ normal(0,.1);
 data <- readRDS("./data.rds") #load annual input data set, if necessary
 #run the model (data is the list of data sets. For other parameters, return to the function description)
 model = stan(model_code=stanmodelcode, data=data, iter=iter, 
-                    warmup=warmup, thin=, chains=3,cores=3,
+                    warmup=warmup, thin= thin, chains=3,cores=3,
                     control = list(adapt_delta =adapt_delta ,max_treedepth =max_treedepth ))
 
